@@ -159,7 +159,7 @@
   </section>
 
   <!-- About Section -->
-  <section id="about">
+  <section id="about">  
     <h2>About Good Foot Properties Limited</h2>
     <p>
       Good Foot Properties Limited helps buyers and sellers find quality land opportunities in Kenya including Dagoretti, Kikuyu, Nachu, Kamango, Lusigetti, Gikambura, Baraniki, and Thigio. Our commitment to excellence and transparency makes us a trusted name in the property industry.
@@ -180,16 +180,20 @@
   </section>
 
   <!-- Contact Section -->
-  <section id="contact">
-    <h2>Get In Touch</h2>
-    <form id="contactForm">
-      <input type="text" placeholder="Your Name" required />
-      <input type="email" placeholder="Your Email" required />
-      <input type="tel" placeholder="Phone Number" required />
-      <textarea placeholder="Your Message" required></textarea>
-      <button type="submit">Send Message</button>
-    </form>
-  </section>
+  <!-- contact.html -->
+<form id="contactForm" style="max-width: 600px; margin: auto;">
+  <label for="name">Name</label>
+  <input type="text" id="name" name="name" placeholder="Your Name" required />
+
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" placeholder="Your Email" required />
+
+  <label for="message">Message</label>
+  <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+
+  <button type="submit">Send</button>
+</form>
+
 
   <!-- Footer -->
   <footer>
