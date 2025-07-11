@@ -5,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Good Foot Properties Limited</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/jpeg" href="assets/icon.jpeg" />
 </head>
 <body>
   <!-- Header -->
   <header>
     <div class="container">
-      <h1>🏠 Good Foot Properties</h1>
+      <h1 class="logo">
+        <img src="assets/icon.jpeg" alt="Good Foot Properties Logo" class="logo-icon">
+        Good Foot Properties
+      </h1>
       <nav>
         <a href="#home">Home</a>
         <div class="dropdown">
@@ -28,11 +32,21 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section id="home" class="hero">
-    <h2>Find Your Dream Property in Kikuyu, Kenya</h2>
-    <p>Good Foot Properties — trusted land partners in Kenya.</p>
-    <a href="#contact" class="btn">Get Started</a>
+  <!-- Hero Section with Sliding Images -->
+  <section id="home" class="hero-slider-container">
+    <div class="hero-slide" style="background-image: url('assets/staff2.jpeg');"></div>
+    <div class="hero-slide" style="background-image: url('assets/staff3.jpeg');"></div>
+    <div class="hero-slide" style="background-image: url('assets/goodroads.jpeg');"></div>
+    <div class="hero-slide" style="background-image: url('assets/office1.jpeg');"></div>
+    <div class="hero-slide" style="background-image: url('assets/land2.jpeg');"></div>
+
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h2>Find Your Dream Property Kenya, with ready title deeds</h2>
+        <p>Good Foot Properties — trusted land partners in Kenya.</p>
+        <a href="contact.html" class="btn">Get Started</a>
+      </div>
+    </div>
   </section>
 
   <!-- Properties Section -->
@@ -40,34 +54,34 @@
     <h2>Available Properties</h2>
     <div class="property-list">
       <div class="property-card">
-        <img src="assets/land1.jpeg" alt="Land in Kamangu">
-        <h3>1/8 Acre in Kamangu</h3>
+        <img src="assets/land1.jpeg" alt="Land in Dagoretti">
+        <h3>1/8 Acre in Dagoretti</h3>
         <p><strong>Price:</strong> Ksh 850,000</p>
-        <p><strong>Location:</strong> Kikuyu - Kamangu</p>
+        <p><strong>Location:</strong> Dagoretti</p>
         <a href="property1.html" class="btn">View Details</a>
       </div>
 
       <div class="property-card">
-        <img src="assets/land2.jpeg" alt="Land in Gikambura">
-        <h3>50x100 Plot in Gikambura</h3>
+        <img src="assets/land2.jpeg" alt="Land in Kikuyu">
+        <h3>50x100 Plot in Kikuyu</h3>
         <p><strong>Price:</strong> Ksh 1,200,000</p>
-        <p><strong>Location:</strong> Kikuyu - Gikambura</p>
+        <p><strong>Location:</strong> Kikuyu</p>
         <a href="property2.html" class="btn">View Details</a>
       </div>
 
       <div class="property-card">
-        <img src="assets/land3.jpeg" alt="Land in Thogoto">
-        <h3>Quarter Acre in Thogoto</h3>
+        <img src="assets/land3.jpeg" alt="Land in Nachu">
+        <h3>Quarter Acre in Nachu</h3>
         <p><strong>Price:</strong> Ksh 2,000,000</p>
-        <p><strong>Location:</strong> Kikuyu - Thogoto</p>
+        <p><strong>Location:</strong> Nachu</p>
         <a href="property3.html" class="btn">View Details</a>
       </div>
 
       <div class="property-card">
-        <img src="assets/land4.jpeg" alt="Land in Mutarakwa">
-        <h3>1/8 Acre in Mutarakwa</h3>
+        <img src="assets/land4.jpeg" alt="Land in Kamango">
+        <h3>1/8 Acre in Kamango</h3>
         <p><strong>Price:</strong> Ksh 700,000</p>
-        <p><strong>Location:</strong> Kikuyu - Mutarakwa</p>
+        <p><strong>Location:</strong> Kamango</p>
         <a href="property4.html" class="btn">View Details</a>
       </div>
 
@@ -75,15 +89,15 @@
         <img src="assets/land5.jpeg" alt="Land in Lusigetti">
         <h3>1/4 Acre in Lusigetti</h3>
         <p><strong>Price:</strong> Ksh 1,500,000</p>
-        <p><strong>Location:</strong> Kikuyu - Lusigetti</p>
+        <p><strong>Location:</strong> Lusigetti</p>
         <a href="property5.html" class="btn">View Details</a>
       </div>
 
       <div class="property-card">
-        <img src="assets/land6.jpeg" alt="Land in Zambezi">
-        <h3>50x100 in Zambezi</h3>
+        <img src="assets/land6.jpeg" alt="Land in Thigio">
+        <h3>50x100 in Thigio</h3>
         <p><strong>Price:</strong> Ksh 950,000</p>
-        <p><strong>Location:</strong> Kikuyu - Zambezi</p>
+        <p><strong>Location:</strong> Thigio</p>
         <a href="property6.html" class="btn">View Details</a>
       </div>
     </div>
@@ -113,6 +127,22 @@
         <h3>Investment Advisory</h3>
         <p>Strategic guidance on land investment in Kenya.</p>
       </div>
+      <div class="service">
+        <h3>We Buy and Sell Land</h3>
+        <p>We buy and sell land in prime and upcoming areas.</p>
+      </div>
+      <div class="service">
+        <h3>Residential & Commercial Sales</h3>
+        <p>Get help selling your residential and commercial property fast.</p>
+      </div>
+      <div class="service">
+        <h3>Property Vetting & Agency</h3>
+        <p>We help ensure every deal is verified and secure.</p>
+      </div>
+      <div class="service">
+        <h3>Leasing and Letting</h3>
+        <p>Professional assistance with leasing and letting your properties.</p>
+      </div>
     </div>
   </section>
 
@@ -120,8 +150,7 @@
   <section id="about">
     <h2>About Good Foot Properties Limited</h2>
     <p>
-      With over 15 years of experience in the Kenyan real estate market, Good Foot Properties Limited helps buyers and sellers find quality land opportunities in Kikuyu and beyond.
-      Our commitment to excellence and transparency makes us a trusted name in the property industry.
+      Good Foot Properties Limited helps buyers and sellers find quality land opportunities in Kenya including Dagoretti, Kikuyu, Nachu, Kamango, Lusigetti, Gikambura, Baraniki, and Thigio. Our commitment to excellence and transparency makes us a trusted name in the property industry.
     </p>
   </section>
 
