@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset 
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/</loc>
+    <priority>1.0</priority>
+    <changefreq>daily</changefreq>
+  </url>
+
+  <!-- Properties Section -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#properties</loc>
+    <priority>0.9</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Cars Section -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#cars</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Apartments Section -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#apartments</loc>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Services Section -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#services</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- About Section -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#about</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Why Choose Us -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/#why-choose-us</loc>
+    <priority>0.7</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Contact Page -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/contact.html</loc>
+    <priority>0.9</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+  <!-- Individual Property Pages (sample) -->
+  <url>
+    <loc>https://goodfootproperties.co.ke/property1.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://goodfootproperties.co.ke/property2.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://goodfootproperties.co.ke/property3.html</loc>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+
+</urlset>
