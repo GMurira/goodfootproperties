@@ -1,0 +1,431 @@
+const database = require('../models/database');
+
+class ContactController {
+  // Submit contact message (public endpoint)
+  async submitMessage(req, res) {
+    try {
+      const { name, email, phone, message } = req.body;
+
+      // Validate required fields
+      if (!name || !email || !message) {
+        return res.status(400).json({
+          error: 'Missing required fields',
+          message: 'Name, email, and message are required'
+        });
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({
+          error: 'Invalid email format',
+          message: 'Please provide a valid email address'
+        });
+      }
+
+      // Validate phone if provided
+      if (phone && phone.length < 10) {
+        return res.status(400).json({
+          error: 'Invalid phone number',
+          message: 'Phone number must be at least 10 digits'
+        });
+      }
+
+      // Insert contact message
+      const result = await database.run(
+        'INSERT INTO contact_messages (name, email, phone, message) VALUES (?, ?, ?, ?)',
+        [name, email, phone || null, message]
+      );
+
+      // Get the created message
+      const newMessage = await database.get(
+        'SELECT * FROM contact_messages WHERE id = ?',
+        [result.id]
+      );
+
+      res.status(201).json({
+        success: true,
+        message: 'Thank you! Your message has been sent successfully. We will contact you soon.',
+        data: {
+          id: newMessage.id,
+          name: newMessage.name,
+          email: newMessage.email,
+          created_at: newMessage.created_at
+        }
+      });
+
+    } catch (error) {
+      console.error('Submit message error:', error);
+      res.status(500).json({
+        error: 'Failed to send message',
+        message: 'An error occurred while sending your message. Please try again.'
+      });
+    }
+  }
+
+  // Get all contact messages (admin only)
+  async getAllMessages(req, res) {
+    try {
+      const { status, page = 1, limit = 20 } = req.query;
+      
+      let query = 'SELECT * FROM contact_messages';
+      let params = [];
+      
+      if (status && ['unread', 'read', 'replied'].includes(status)) {
+        query += ' WHERE status = ?';
+        params.push(status);
+      }
+      
+      query += ' ORDER BY created_at DESC';
+      
+      // Add pagination
+      const offset = (page - 1) * limit;
+      query += ' LIMIT ? OFFSET ?';
+      params.push(parseInt(limit), parseInt(offset));
+      
+      const messages = await database.query(query, params);
+      
+      // Get total count
+      let countQuery = 'SELECT COUNT(*) as count FROM contact_messages';
+      let countParams = [];
+      
+      if (status && ['unread', 'read', 'replied'].includes(status)) {
+        countQuery += ' WHERE status = ?';
+        countParams.push(status);
+      }
+      
+      const countResult = await database.get(countQuery, countParams);
+      const totalMessages = countResult.total;
+      const totalPages = Math.ceil(totalMessages / limit);
+      
+      res.json({
+        success: true,
+        data: messages,
+        pagination: {
+          currentPage: parseInt(page),
+          totalPages,
+          totalMessages,
+          hasNextPage: page < totalPages,
+          hasPrevPage: page > 1
+        }
+      });
+      
+    } catch (error) {
+      console.error('Get messages error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch messages',
+        message: 'An error occurred while fetching contact messages'
+      });
+    }
+  }
+
+  // Get single contact message (admin only)
+  async getMessageById(req, res) {
+    try {
+      const { id } = req.params;
+      
+      const message = await database.get(
+        'SELECT * FROM contact_messages WHERE id = ?',
+        [id]
+      );
+      
+      if (!message) {
+        return res.status(404).json({
+          error: 'Message not found',
+          message: 'The requested contact message does not exist'
+        });
+      }
+      
+      // Mark as read if it was unread
+      if (message.status === 'unread') {
+        await database.run(
+          'UPDATE contact_messages SET status = ? WHERE id = ?',
+          ['read', id]
+        );
+        message.status = 'read';
+      }
+      
+      res.json({
+        success: true,
+        data: message
+      });
+      
+    } catch (error) {
+      console.error('Get message by ID error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch message',
+        message: 'An error occurred while fetching the contact message'
+      });
+    }
+  }
+
+  // Update message status (admin only)
+  async updateMessageStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      // Validate status
+      if (!status || !['unread', 'read', 'replied'].includes(status)) {
+        return res.status(400).json({
+          error: 'Invalid status',
+          message: 'Status must be one of: unread, read, replied'
+        });
+      }
+
+      // Check if message exists
+      const existingMessage = await database.get(
+        'SELECT * FROM contact_messages WHERE id = ?',
+        [id]
+      );
+
+      if (!existingMessage) {
+        return res.status(404).json({
+          error: 'Message not found',
+          message: 'The contact message you want to update does not exist'
+        });
+      }
+
+      // Update message status
+      await database.run(
+        'UPDATE contact_messages SET status = ? WHERE id = ?',
+        [status, id]
+      );
+
+      // Get updated message
+      const updatedMessage = await database.get(
+        'SELECT * FROM contact_messages WHERE id = ?',
+        [id]
+      );
+
+      res.json({
+        success: true,
+        message: 'Message status updated successfully',
+        data: updatedMessage
+      });
+
+    } catch (error) {
+      console.error('Update message status error:', error);
+      res.status(500).json({
+        error: 'Failed to update message status',
+        message: 'An error occurred while updating the message status'
+      });
+    }
+  }
+
+  // Delete contact message (admin only)
+  async deleteMessage(req, res) {
+    try {
+      const { id } = req.params;
+
+      // Check if message exists
+      const message = await database.get(
+        'SELECT * FROM contact_messages WHERE id = ?',
+        [id]
+      );
+
+      if (!message) {
+        return res.status(404).json({
+          error: 'Message not found',
+          message: 'The contact message you want to delete does not exist'
+        });
+      }
+
+      // Delete message from database
+      await database.run('DELETE FROM contact_messages WHERE id = ?', [id]);
+
+      res.json({
+        success: true,
+        message: 'Contact message deleted successfully'
+      });
+
+    } catch (error) {
+      console.error('Delete message error:', error);
+      res.status(500).json({
+        error: 'Failed to delete message',
+        message: 'An error occurred while deleting the contact message'
+      });
+    }
+  }
+
+  // Get contact statistics (admin only)
+  async getContactStats(req, res) {
+    try {
+      const stats = await Promise.all([
+        database.get('SELECT COUNT(*) as count FROM contact_messages'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "unread"'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "read"'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "replied"'),
+        database.get(`
+          SELECT COUNT(*) as count 
+          FROM contact_messages 
+          WHERE DATE(created_at) = DATE('now')
+        `),
+        database.get(`
+          SELECT COUNT(*) as count 
+          FROM contact_messages 
+          WHERE created_at >= DATE('now', '-7 days')
+        `)
+      ]);
+
+      res.json({
+        success: true,
+        data: {
+          totalMessages: stats[0].total,
+          messagesByStatus: {
+            unread: stats[1].unread,
+            read: stats[2].read,
+            replied: stats[3].replied
+          },
+          recentActivity: {
+            today: stats[4].today,
+            thisWeek: stats[5].thisWeek
+          }
+        }
+      });
+
+    } catch (error) {
+      console.error('Contact stats error:', error);
+      res.status(500).json({
+        error: 'Failed to fetch contact stats',
+        message: 'An error occurred while fetching contact statistics'
+      });
+    }
+  }
+}
+
+module.exports = new ContactController();
+
+// Get contact statistics for admin dashboard
+const getContactStats = async (req, res) => {
+  try {
+    const [
+      totalMessages,
+      unreadMessages,
+      readMessages,
+      repliedMessages
+    ] = await Promise.all([
+      database.get('SELECT COUNT(*) as count FROM contact_messages'),
+      database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "unread"'),
+      database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "read"'),
+      database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "replied"')
+    ]);
+
+    res.json({
+      success: true,
+      data: {
+        total: totalMessages.count,
+        unread: unreadMessages.count,
+        read: readMessages.count,
+        replied: repliedMessages.count
+      }
+    });
+  } catch (error) {
+    console.error('Contact stats error:', error);
+    res.status(500).json({ success: false, message: 'Failed to get contact stats' });
+  }
+};
+
+
+module.exports = {
+  submitContact: async (req, res) => {
+    try {
+      const { name, email, message } = req.body;
+      
+      if (!name || !email || !message) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+      }
+
+      const result = await database.run(
+        'INSERT INTO contact_messages (name, email, message, status, created_at) VALUES (?, ?, ?, ?, ?)',
+        [name, email, message, 'unread', new Date().toISOString()]
+      );
+
+      res.json({ success: true, message: 'Message sent successfully', id: result.lastID });
+    } catch (error) {
+      console.error('Contact submission error:', error);
+      res.status(500).json({ success: false, message: 'Failed to send message' });
+    }
+  },
+
+  getMessages: async (req, res) => {
+    try {
+      const { status, page = 1, limit = 10 } = req.query;
+      const offset = (page - 1) * limit;
+      
+      let query = 'SELECT * FROM contact_messages';
+      let params = [];
+      
+      if (status && status !== 'all') {
+        query += ' WHERE status = ?';
+        params.push(status);
+      }
+      
+      query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+      params.push(parseInt(limit), parseInt(offset));
+      
+      const messages = await database.all(query, params);
+      
+      res.json({ success: true, data: messages });
+    } catch (error) {
+      console.error('Get messages error:', error);
+      res.status(500).json({ success: false, message: 'Failed to get messages' });
+    }
+  },
+
+  updateMessageStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+      
+      await database.run('UPDATE contact_messages SET status = ? WHERE id = ?', [status, id]);
+      
+      res.json({ success: true, message: 'Message status updated' });
+    } catch (error) {
+      console.error('Update message status error:', error);
+      res.status(500).json({ success: false, message: 'Failed to update message status' });
+    }
+  },
+
+  deleteMessage: async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      await database.run('DELETE FROM contact_messages WHERE id = ?', [id]);
+      
+      res.json({ success: true, message: 'Message deleted' });
+    } catch (error) {
+      console.error('Delete message error:', error);
+      res.status(500).json({ success: false, message: 'Failed to delete message' });
+    }
+  },
+
+  getContactStats: async (req, res) => {
+    try {
+      const [
+        totalMessages,
+        unreadMessages,
+        readMessages,
+        repliedMessages
+      ] = await Promise.all([
+        database.get('SELECT COUNT(*) as count FROM contact_messages'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "unread"'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "read"'),
+        database.get('SELECT COUNT(*) as count FROM contact_messages WHERE status = "replied"')
+      ]);
+
+      res.json({
+        success: true,
+        data: {
+          total: totalMessages.count,
+          unread: unreadMessages.count,
+          read: readMessages.count,
+          replied: repliedMessages.count
+        }
+      });
+    } catch (error) {
+      console.error('Contact stats error:', error);
+      res.status(500).json({ success: false, message: 'Failed to get contact stats' });
+    }
+  }
+};

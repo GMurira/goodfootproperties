@@ -1,0 +1,132 @@
+// script.js
+document.getElementById('contactForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  fetch('/api/contact/submit', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({name: new FormData(e.target).get('name'), email: new FormData(e.target).get('email'), message: new FormData(e.target).get('message')})}).then(r => r.json()).then(d => {alert(d.success ? 'Message sent successfully!' : 'Error: ' + d.message); if(d.success) e.target.reset();});
+});
+
+// Fade-in effect on scroll
+const observer = new IntersectionObserver(
+  (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  },
+  {
+    threshold: 0.1
+  }
+);
+
+document.querySelectorAll("section").forEach(section => {
+  observer.observe(section);
+});
+
+const form = document.getElementById("propertyForm");
+
+if (form) {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    const response = await fetch("http://localhost/goodfoot-admin/add_property.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.text();
+    alert(result); // Show PHP response
+  });
+}
+const contactForm = document.getElementById("contactForm");
+
+if (contactForm) {
+  contactForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(contactForm);
+
+    const response = await fetch("http://localhost/goodfoot-admin/send_contact.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await response.text();
+    alert(result);
+    contactForm.reset();
+  });
+}
+
+
+// API Integration
+async function loadProperties() {
+  try {
+    const response = await fetch('/api/properties?limit=6');
+    const data = await response.json();
+    if (data.success) {
+      document.querySelector('.property-list').innerHTML = data.data.map(p => `
+        <div class="property-card">
+          <img src="${p.image_url || 'assets/land1.jpeg'}" alt="${p.title}">
+          <h3>${p.title}</h3>
+          <p><strong>Price:</strong> Ksh ${p.price.toLocaleString()}</p>
+          <p><strong>Location:</strong> ${p.location}</p>
+          <a href="#" class="btn">View Details</a>
+        </div>
+      `).join('');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+document.addEventListener('DOMContentLoaded', loadProperties);
+
+// Force load properties from API
+setTimeout(() => {
+  fetch('/api/properties?limit=6')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        const propertyList = document.querySelector('.property-list');
+        if (propertyList) {
+          propertyList.innerHTML = data.data.map(p => `
+            <div class="property-card">
+              <img src="${p.image_url || 'assets/land1.jpeg'}" alt="${p.title}">
+              <h3>${p.title}</h3>
+              <p><strong>Price:</strong> Ksh ${p.price.toLocaleString()}</p>
+              <p><strong>Location:</strong> ${p.location}</p>
+              <a href="#" class="btn">View Details</a>
+            </div>
+          `).join('');
+          console.log('✅ Properties loaded from API:', data.data.length);
+        }
+      }
+    })
+    .catch(err => console.error('❌ Error loading properties:', err));
+}, 1000);
+
+// Force load properties from API
+setTimeout(() => {
+  fetch('/api/properties?limit=6')
+    .then(r => r.json())
+    .then(data => {
+      if (data.success) {
+        const propertyList = document.querySelector('.property-list');
+        if (propertyList) {
+          propertyList.innerHTML = data.data.map(p => `
+            <div class="property-card">
+              <img src="${p.image_url || 'assets/land1.jpeg'}" alt="${p.title}">
+              <h3>${p.title}</h3>
+              <p><strong>Price:</strong> Ksh ${p.price.toLocaleString()}</p>
+              <p><strong>Location:</strong> ${p.location}</p>
+              <a href="#" class="btn">View Details</a>
+            </div>
+          `).join('');
+          console.log('✅ Properties loaded from API:', data.data.length);
+        }
+      }
+    })
+    .catch(err => console.error('❌ Error loading properties:', err));
+}, 1000);
+console.log('🔥 Script loaded successfully!');
