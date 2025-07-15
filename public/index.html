@@ -59,6 +59,7 @@
           <a href="#services">Services</a>
           <a href="#about">About</a>
           <a href="#contact">Contact</a>
+          <button class="btn btn-signup" onclick="showSignupModal()">Sign Up</button>
         </div>
       </nav>
     </div>
@@ -83,8 +84,18 @@
 
   <!-- Properties Section -->
   <section id="properties">
-    <h2>Available Properties</h2>
-    <div class="property-list">
+    <div class="container">
+      <h2>Available Properties</h2>
+      
+      <!-- Filter Buttons -->
+      <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all" onclick="filterProperties('all')">All Properties</button>
+        <button class="filter-btn" data-filter="lands" onclick="filterProperties('lands')">Lands</button>
+        <button class="filter-btn" data-filter="cars" onclick="filterProperties('cars')">Cars</button>
+        <button class="filter-btn" data-filter="apartments" onclick="filterProperties('apartments')">Apartments</button>
+      </div>
+
+      <div class="property-list">
       <div class="property-card">
         <img src="assets/land1.jpeg" alt="Land in Dagoretti">
         <h3>1/8 Acre in Dagoretti</h3>
@@ -126,6 +137,7 @@
         <p><strong>Price:</strong> Ksh 950,000</p>
         <p><strong>Location:</strong> Thigio</p>
         <a href="property6.html" class="btn">View Details</a>
+      </div>
       </div>
     </div>
   </section>
@@ -187,19 +199,31 @@
   </section>
 
   <!-- Contact Section -->
-  <!-- contact.html -->
-  <form id="contactForm" style="max-width: 600px; margin: auto;">
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name" placeholder="Your Name" required />
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Us</h2>
+      <p>Get in touch with us for any inquiries about our properties or services.</p>
+      
+      <form id="contactForm" style="max-width: 600px; margin: auto;">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" name="name" placeholder="Your Name" required />
+        </div>
 
-    <label for="email">Email</label>
-    <input type="email" id="email" name="email" placeholder="Your Email" required />
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" placeholder="Your Email" required />
+        </div>
 
-    <label for="message">Message</label>
-    <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+        </div>
 
-    <button type="submit">Send</button>
-  </form>
+        <button type="submit" class="btn btn-primary">Send Message</button>
+      </form>
+    </div>
+  </section>
 
 
   <!-- Footer -->

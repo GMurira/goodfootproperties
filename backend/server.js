@@ -159,7 +159,7 @@ process.on('SIGTERM', async () => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`
 🚀 Good Foot Properties API Server Started!
 📍 Server running on: http://localhost:${PORT}
@@ -169,6 +169,14 @@ app.listen(PORT, () => {
 📧 Contact: http://localhost:${PORT}/contact
 🔐 Admin: http://localhost:${PORT}/admin
   `);
+
+  // Check database connection on startup
+  try {
+    const testQuery = await database.get('SELECT 1 as test');
+    console.log('✅ Database connection successful');
+  } catch (error) {
+    console.error('❌ Database connection failed:', error);
+  }
 });
 
 module.exports = app;
