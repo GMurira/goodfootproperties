@@ -1,8 +1,10 @@
 // script.js
-document.getElementById('contactForm').addEventListener('submit', function (e) {
-  e.preventDefault();
-  alert('Thank you! We will contact you soon.');
-});
+
+// Old basic alert — replaced below with real server response
+// document.getElementById('contactForm').addEventListener('submit', function (e) {
+//   e.preventDefault();
+//   alert('Thank you! We will contact you soon.');
+// });
 
 // Fade-in effect on scroll
 const observer = new IntersectionObserver(
@@ -37,9 +39,10 @@ if (form) {
     });
 
     const result = await response.text();
-    alert(result); // Show PHP response
+    alert(result); // ✅ Alert from PHP (property submission)
   });
 }
+
 const contactForm = document.getElementById("contactForm");
 
 if (contactForm) {
@@ -54,8 +57,7 @@ if (contactForm) {
     });
 
     const result = await response.text();
-    alert(result);
+    alert(result); // ✅ Alert from PHP (contact message)
     contactForm.reset();
   });
 }
-
