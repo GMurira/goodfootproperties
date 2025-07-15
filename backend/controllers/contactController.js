@@ -225,7 +225,7 @@ const getContactStats = async (req, res) => {
     res.json({
       success: true,
       data: {
-        total: totalMessages.count,
+        totalMessages: totalMessages.count,
         messagesByStatus: {
         unread: unreadMessages.count,
         read: readMessages.count,

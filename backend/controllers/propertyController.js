@@ -323,7 +323,7 @@ class PropertyController {
       res.json({
         success: true,
         data: {
-          total: totalProperties.count,
+          totalProperties: totalProperties.count,
           propertiesByCategory: {
             lands: landsCount.count,
             cars: carsCount.count,

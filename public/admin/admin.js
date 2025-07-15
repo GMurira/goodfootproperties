@@ -228,6 +228,8 @@ class AdminDashboard {
             if (response.ok) {
                 const data = await response.json();
                 this.updateDashboardStats(data.data);
+            } else {
+                console.error('Dashboard stats request failed:', response.status, response.statusText);
             }
         } catch (error) {
             console.error('Error loading dashboard stats:', error);
@@ -244,6 +246,8 @@ class AdminDashboard {
             if (response.ok) {
                 const data = await response.json();
                 this.updateContactStats(data.data);
+            } else {
+                console.error('Contact stats request failed:', response.status, response.statusText);
             }
         } catch (error) {
             console.error('Error loading contact stats:', error);
