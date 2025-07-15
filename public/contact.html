@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Contact Us - Good Foot Properties</title>
+  <title>Contact Us - Good Foot Properties Limited</title>
   <link rel="stylesheet" href="/css/style.css" />
   <style>
     .map-section {
@@ -23,9 +23,12 @@
 <body>
   <!-- Header -->
   <header>
-    <div class="container">
-      <h1>🏠 Good Foot Properties</h1>
-      <nav>
+    <div class="container responsive-nav">
+      <div class="nav-left">
+        <img src="/assets/icon.jpeg" alt="Logo" class="logo-icon" />
+        <h1 class="logo">Good Foot Properties Limited</h1>
+      </div>
+      <nav class="mobile-menu">
         <a href="index.html#home">Home</a>
         <div class="dropdown">
           <button class="dropbtn">Properties</button>
@@ -42,23 +45,25 @@
     </div>
   </header>
 
- <!-- Contact Form Section -->
-<!-- contact.html -->
-<form id="contactForm" style="max-width: 600px; margin: auto;">
-  <label for="name">Name</label>
-  <input type="text" id="name" name="name" placeholder="Your Name" required />
+  <!-- Spacer to avoid header overlap -->
+  <div style="height: 100px;"></div>
 
-  <label for="email">Email</label>
-  <input type="email" id="email" name="email" placeholder="Your Email" required />
+  <!-- Contact Form Section -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form id="contactForm">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" placeholder="Your Name" required />
 
-  <label for="message">Message</label>
-  <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="Your Email" required />
 
-  <button type="submit">Send</button>
-</form>
+      <label for="message">Message</label>
+      <textarea id="message" name="message" placeholder="Your message..." required></textarea>
 
-
-
+      <button type="submit">Send</button>
+    </form>
+  </section>
 
   <!-- Google Map Section -->
   <section class="map-section">
@@ -75,6 +80,6 @@
     <p>&copy; 2025 Good Foot Properties Limited. All rights reserved.</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script src="/script.js"></script>
 </body>
 </html>
