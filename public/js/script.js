@@ -5,19 +5,30 @@ let currentFilter = 'all';
 // Contact form submission
 document.getElementById('contactForm').addEventListener('submit', function (e) {
   e.preventDefault();
+
+  const formData = new FormData(e.target); // ✅ Declare formData before using it
+
   fetch('/api/contact/submit', {
-    method: 'POST', 
-    headers: {'Content-Type': 'application/json'}, 
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      name: new FormData(e.target).get('name'), 
-      email: new FormData(e.target).get('email'), 
-      message: new FormData(e.target).get('message')
+      name: formData.get('name'),
+      phone: formData.get('phone'),
+      email: formData.get('email'),
+      message: formData.get('message')
     })
-  }).then(r => r.json()).then(d => {
-    alert(d.success ? 'Message sent successfully!' : 'Error: ' + d.message); 
-    if(d.success) e.target.reset();
-  });
+  })
+    .then(r => r.json())
+    .then(d => {
+      alert(d.success ? 'Message sent successfully!' : 'Error: ' + d.message);
+      if (d.success) e.target.reset();
+    })
+    .catch(error => {
+      console.error('❌ Contact form error:', error);
+      alert('Something went wrong. Please try again.');
+    });
 });
+
 
 // Fade-in effect on scroll
 const observer = new IntersectionObserver(
