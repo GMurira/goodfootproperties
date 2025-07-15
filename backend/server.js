@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 const multer = require('multer');
 require('dotenv').config();
 
@@ -15,6 +16,21 @@ const database = require('./models/database');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// ✅ Ensure upload directories exist
+const uploadDirs = [
+  path.join(__dirname, 'uploads'),
+  path.join(__dirname, 'uploads/lands'),
+  path.join(__dirname, 'uploads/cars'),
+  path.join(__dirname, 'uploads/apartments'),
+];
+
+uploadDirs.forEach(dir => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`📁 Created upload directory: ${dir}`);
+  }
+});
+
 // Middleware
 app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:3000',
@@ -24,7 +40,7 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files (uploaded images)
+// Serve uploaded image files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Serve frontend static files
@@ -109,7 +125,6 @@ app.get('*', (req, res) => {
 app.use((error, req, res, next) => {
   console.error('🔥 Global Error:', error);
 
-  // Handle Multer file size errors
   if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
     return res.status(400).json({
       error: 'File too large',
@@ -117,7 +132,6 @@ app.use((error, req, res, next) => {
     });
   }
 
-  // Handle unsupported file types
   if (error.message === 'Only image files are allowed!') {
     return res.status(400).json({
       error: 'Invalid file type',
@@ -159,7 +173,6 @@ app.listen(PORT, async () => {
 🔐 Admin: http://localhost:${PORT}/admin
   `);
 
-  // Test DB connection
   try {
     const test = await database.get('SELECT 1 as test');
     console.log('✅ Database connection successful');
