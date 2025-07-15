@@ -1,23 +1,31 @@
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 require('dotenv').config();
+const fs = require('fs');
 
-const dbPath = process.env.DB_PATH || './database/properties.db';
+// Use environment DB_PATH or default to /tmp for Render-safe directory
+const dbPath = process.env.DB_PATH || path.join('/tmp', 'properties.db');
+
+// Ensure directory exists (only for non-/tmp custom paths)
+const dbDir = path.dirname(dbPath);
+if (!fs.existsSync(dbDir)) {
+  fs.mkdirSync(dbDir, { recursive: true });
+}
 
 class Database {
   constructor() {
     this.db = new sqlite3.Database(dbPath, (err) => {
       if (err) {
-        console.error('Error opening database:', err.message);
+        console.error('❌ Error opening database:', err.message);
       } else {
-        console.log('Connected to SQLite database');
+        console.log(`✅ Connected to SQLite database at: ${dbPath}`);
         this.initializeTables();
       }
     });
   }
 
   initializeTables() {
-    // Properties table with categories
+    // Properties table
     this.db.run(`
       CREATE TABLE IF NOT EXISTS properties (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,13 +41,7 @@ class Database {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
-    `, (err) => {
-      if (err) {
-        console.error('Error creating properties table:', err.message);
-      } else {
-        console.log('Properties table ready');
-      }
-    });
+    `, this._logResult('properties'));
 
     // Contact messages table
     this.db.run(`
@@ -53,20 +55,7 @@ class Database {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
-    `, (err) => {
-      if (err) {
-        console.error('Error creating contact_messages table:', err.message);
-      } else {
-        console.log('Contact messages table ready');
-        
-        // updated_at for message updates
-        this.db.run(`ALTER TABLE contact_messages ADD COLUMN updated_at DATETIME`, (alterErr) => {
-          if (alterErr && !/duplicate column/.test(alterErr.message)) {
-            console.error('Error adding updated_at column:', alterErr.message);
-          }
-        });
-      }
-    });
+    `, this._logResult('contact_messages'));
 
     // Admin users table
     this.db.run(`
@@ -79,9 +68,9 @@ class Database {
       )
     `, (err) => {
       if (err) {
-        console.error('Error creating admin_users table:', err.message);
+        console.error('❌ Error creating admin_users table:', err.message);
       } else {
-        console.log('Admin users table ready');
+        console.log('✅ admin_users table ready');
         this.createDefaultAdmin();
       }
     });
@@ -91,25 +80,23 @@ class Database {
     const bcrypt = require('bcryptjs');
     const username = process.env.ADMIN_USERNAME || 'admin';
     const password = process.env.ADMIN_PASSWORD || 'admin123';
-    
-    // Check if admin exists
+
     this.db.get('SELECT id FROM admin_users WHERE username = ?', [username], (err, row) => {
       if (err) {
-        console.error('Error checking admin user:', err.message);
+        console.error('❌ Error checking admin user:', err.message);
         return;
       }
-      
+
       if (!row) {
-        // Create default admin
         const passwordHash = bcrypt.hashSync(password, 10);
         this.db.run(
           'INSERT INTO admin_users (username, password_hash) VALUES (?, ?)',
           [username, passwordHash],
           (err) => {
             if (err) {
-              console.error('Error creating default admin:', err.message);
+              console.error('❌ Error creating default admin:', err.message);
             } else {
-              console.log(`Default admin created: ${username}`);
+              console.log(`✅ Default admin created: ${username}`);
             }
           }
         );
@@ -117,41 +104,41 @@ class Database {
     });
   }
 
-  // Helper method to run queries with promises
+  // Log table creation result
+  _logResult(tableName) {
+    return (err) => {
+      if (err) {
+        console.error(`❌ Error creating ${tableName} table:`, err.message);
+      } else {
+        console.log(`✅ ${tableName} table ready`);
+      }
+    };
+  }
+
+  // Promisified helpers
   query(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.all(sql, params, (err, rows) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(rows);
-        }
+        if (err) return reject(err);
+        resolve(rows);
       });
     });
   }
 
-  // Helper method to run single queries
   run(sql, params = []) {
     return new Promise((resolve, reject) => {
-      this.db.run(sql, params, function(err) {
-        if (err) {
-          reject(err);
-        } else {
-          resolve({ id: this.lastID, changes: this.changes });
-        }
+      this.db.run(sql, params, function (err) {
+        if (err) return reject(err);
+        resolve({ id: this.lastID, changes: this.changes });
       });
     });
   }
 
-  // Helper method to get single row
   get(sql, params = []) {
     return new Promise((resolve, reject) => {
       this.db.get(sql, params, (err, row) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(row);
-        }
+        if (err) return reject(err);
+        resolve(row);
       });
     });
   }
@@ -159,12 +146,9 @@ class Database {
   close() {
     return new Promise((resolve, reject) => {
       this.db.close((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          console.log('Database connection closed');
-          resolve();
-        }
+        if (err) return reject(err);
+        console.log('✅ Database connection closed');
+        resolve();
       });
     });
   }
