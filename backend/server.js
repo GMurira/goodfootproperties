@@ -35,7 +35,7 @@ app.use('/api/properties', propertyRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
 
-// Health check endpoint
+// Health check
 app.get('/api/health', (req, res) => {
   res.json({
     success: true,
@@ -45,7 +45,7 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// API documentation endpoint
+// API Documentation
 app.get('/api', (req, res) => {
   res.json({
     success: true,
@@ -54,15 +54,15 @@ app.get('/api', (req, res) => {
     endpoints: {
       properties: {
         'GET /api/properties': 'Get all properties',
-        'GET /api/properties/category/:category': 'Get properties by category (lands, cars, apartments)',
+        'GET /api/properties/category/:category': 'Get properties by category',
         'GET /api/properties/:id': 'Get single property',
         'POST /api/properties': 'Add new property (admin only)',
         'PUT /api/properties/:id': 'Update property (admin only)',
         'DELETE /api/properties/:id': 'Delete property (admin only)',
-        'GET /api/properties/admin/stats': 'Get dashboard stats (admin only)'
+        'GET /api/properties/admin/stats': 'Dashboard stats (admin only)'
       },
       contact: {
-        'POST /api/contact/submit': 'Submit contact message',
+        'POST /api/contact/submit': 'Submit message',
         'GET /api/contact': 'Get all messages (admin only)',
         'GET /api/contact/stats': 'Get contact stats (admin only)',
         'GET /api/contact/:id': 'Get single message (admin only)',
@@ -91,7 +91,7 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/admin/admin.html'));
 });
 
-// Handle 404 for API routes
+// API 404 handler
 app.use('/api/*', (req, res) => {
   res.status(404).json({
     error: 'API endpoint not found',
@@ -100,26 +100,24 @@ app.use('/api/*', (req, res) => {
   });
 });
 
-// Handle 404 for other routes (serve index.html for SPA)
+// SPA fallback
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Global error handler
 app.use((error, req, res, next) => {
-  console.error('Global error handler:', error);
+  console.error('🔥 Global Error:', error);
 
-  // Multer errors
-  if (error instanceof multer.MulterError) {
-    if (error.code === 'LIMIT_FILE_SIZE') {
-      return res.status(400).json({
-        error: 'File too large',
-        message: 'The uploaded file exceeds the maximum size limit'
-      });
-    }
+  // Handle Multer file size errors
+  if (error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE') {
+    return res.status(400).json({
+      error: 'File too large',
+      message: 'The uploaded file exceeds the size limit'
+    });
   }
 
-  // File type errors
+  // Handle unsupported file types
   if (error.message === 'Only image files are allowed!') {
     return res.status(400).json({
       error: 'Invalid file type',
@@ -134,29 +132,20 @@ app.use((error, req, res, next) => {
 });
 
 // Graceful shutdown
-process.on('SIGINT', async () => {
-  console.log('\nShutting down server gracefully...');
+const shutdown = async (signal) => {
+  console.log(`\n${signal} received. Shutting down gracefully...`);
   try {
     await database.close();
-    console.log('Database connection closed');
+    console.log('✅ Database connection closed');
     process.exit(0);
-  } catch (error) {
-    console.error('Error during shutdown:', error);
+  } catch (err) {
+    console.error('❌ Error during shutdown:', err);
     process.exit(1);
   }
-});
+};
 
-process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully...');
-  try {
-    await database.close();
-    console.log('Database connection closed');
-    process.exit(0);
-  } catch (error) {
-    console.error('Error during shutdown:', error);
-    process.exit(1);
-  }
-});
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 // Start server
 app.listen(PORT, async () => {
@@ -164,18 +153,18 @@ app.listen(PORT, async () => {
 🚀 Good Foot Properties API Server Started!
 📍 Server running on: http://localhost:${PORT}
 🌐 Environment: ${process.env.NODE_ENV || 'development'}
-�� API Documentation: http://localhost:${PORT}/api
+📘 API Docs: http://localhost:${PORT}/api
 🏠 Frontend: http://localhost:${PORT}
 📧 Contact: http://localhost:${PORT}/contact
 🔐 Admin: http://localhost:${PORT}/admin
   `);
 
-  // Check database connection on startup
+  // Test DB connection
   try {
-    const testQuery = await database.get('SELECT 1 as test');
+    const test = await database.get('SELECT 1 as test');
     console.log('✅ Database connection successful');
-  } catch (error) {
-    console.error('❌ Database connection failed:', error);
+  } catch (err) {
+    console.error('❌ Database connection failed:', err.message);
   }
 });
 
