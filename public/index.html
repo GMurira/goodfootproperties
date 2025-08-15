@@ -146,29 +146,46 @@
       </div>
     </div>
   </section>
+<!-- Properties Section -->
+<section id="properties">
+  <div class="container">
+    <h2>Available Properties</h2>
+    
+    <div class="filter-buttons">
+      <button class="filter-btn active" data-filter="all" onclick="filterProperties('all')">All Properties</button>
+      <button class="filter-btn" data-filter="lands" onclick="filterProperties('lands')">Lands</button>
+      <button class="filter-btn" data-filter="cars" onclick="filterProperties('cars')">Cars</button>
+      <button class="filter-btn" data-filter="apartments" onclick="filterProperties('apartments')">Apartments</button>
+    </div>
 
-  <!-- Properties Section -->
-  <section id="properties">
-    <div class="container">
-      <h2>Available Properties</h2>
-      <div class="filter-buttons">
-        <button class="filter-btn active" data-filter="all" onclick="filterProperties('all')">All Properties</button>
-        <button class="filter-btn" data-filter="lands" onclick="filterProperties('lands')">Lands</button>
-        <button class="filter-btn" data-filter="cars" onclick="filterProperties('cars')">Cars</button>
-        <button class="filter-btn" data-filter="apartments" onclick="filterProperties('apartments')">Apartments</button>
-      </div>
-
-      <div class="property-list">
-        <div class="property-card">
-          <img src="assets/land1.jpeg" alt="Land in Dagoretti">
-          <h3>1/8 Acre in Dagoretti</h3>
-          <p><strong>Price:</strong> Ksh 850,000</p>
-          <p><strong>Location:</strong> Dagoretti</p>
-          <a href="property1.html" class="btn">View Details</a>
-        </div>
+    <div class="property-list">
+      <div class="property-card">
+        <img src="assets/land1.jpeg" alt="Land in Dagoretti">
+        <h3>1/8 Acre in Dagoretti</h3>
+        <p><strong>Price:</strong> Ksh 850,000</p>
+        <p><strong>Location:</strong> Dagoretti</p>
+        <a href="property1.html" class="btn">View Details</a>
       </div>
     </div>
-  </section>
+  </div>
+
+  <!-- Inline CSS for property images -->
+  <style>
+    .property-card img {
+      width: 100%;          /* Fill the card width */
+      height: 250px;        /* Fixed height for all images */
+      object-fit: cover;    /* Crop and scale without distortion */
+      border-radius: 8px;   /* Optional: rounded corners */
+    }
+
+    .property-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+  </style>
+</section>
+
 
 <!-- Services Section -->
 <section id="services">
