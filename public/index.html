@@ -26,19 +26,41 @@
   <link rel="stylesheet" href="./css/style.css" />
   <link rel="stylesheet" href="./css/navigation-improvements.css" />
   <link rel="icon" type="image/jpeg" href="assets/icon.jpeg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 </head>
 
 <body>
-   <!-- Floating Phone Call Button -->
-<a href="tel:+254116215934" class="fab fab-call" title="Call Us">
-  <img src="assets/phone.svg" alt="Call Us" class="fab-icon" />
+  <!-- Add Font Awesome in your <head> if not already there -->
+<!-- Phone FAB (right) -->
+<a href="tel:0116215934" class="fab-phone">
+  <i class="fas fa-phone"></i>
 </a>
 
-  <!-- Floating WhatsApp Button using custom SVG -->
-  <a href="https://wa.me/254116215934?text=Hi%20I'm%20interested%20in%20your%20properties" class="fab" target="_blank">
-    <img src="assets/whatsapp.svg" alt="WhatsApp Chat" class="fab-icon" />
-  </a>
- 
+<style>
+.fab-phone {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #007bff; /* Blue for phone */
+  color: white;
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  text-decoration: none;
+  z-index: 9999;
+}
+
+.fab-phone:hover {
+  background-color: #0056b3;
+}
+</style>
 
   <!-- Header -->
   <header>
@@ -117,23 +139,63 @@
     </div>
   </section>
 
-
-  <!-- Services Section -->
-  <section id="services">
-    <div class="container">
-      <h2>Our Services</h2>
-      <div class="services">
-        <div class="service">
-          <h3>Land Sale</h3>
-          <p>We sell prime land in Nairobi and its outskirts.</p>
-        </div>
-        <div class="service">
-          <h3>Consultation</h3>
-          <p>Free consultation for land investment and site visits.</p>
-        </div>
+<!-- Services Section -->
+<section id="services">
+  <div class="container">
+    <h2>Our Services</h2>
+    <div class="services">
+      <div class="service">
+        <h3>Land Sale</h3>
+        <p>
+          We specialize in the sale of prime land across Nairobi and its surrounding regions. 
+          Whether you're seeking land for residential, commercial, or agricultural purposes, 
+          we provide options that meet diverse needs while ensuring legal security and 
+          high potential for value appreciation.
+        </p>
+      </div>
+      <div class="service">
+        <h3>Consultation</h3>
+        <p>
+          Our experts offer free, in-depth consultation for your land investment plans. 
+          We guide you through market trends, property value assessments, and legal 
+          considerations, as well as arrange site visits for informed decision-making.
+        </p>
+      </div>
+      <div class="service">
+        <h3>Residential and Commercial Sales</h3>
+        <p>
+          From cozy apartments to large-scale commercial complexes, we handle property sales 
+          tailored to your needs. Our network ensures you get properties in strategic 
+          locations with great returns on investment.
+        </p>
+      </div>
+      <div class="service">
+        <h3>Land Buying and Selling Assistance</h3>
+        <p>
+          We simplify the process of buying or selling land by managing negotiations, 
+          handling documentation, and ensuring transparent transactions. 
+          Our goal is to save you time while protecting your interests.
+        </p>
+      </div>
+      <div class="service">
+        <h3>Property Vetting and Agency</h3>
+        <p>
+          We conduct thorough background checks and verification of property ownership, 
+          ensuring every transaction is safe. We also provide professional agency 
+          services for buyers, sellers, and investors.
+        </p>
+      </div>
+      <div class="service">
+        <h3>Leasing, Letting, and Agency</h3>
+        <p>
+          We connect property owners with reliable tenants and manage the entire leasing 
+          process. Whether short-term or long-term letting, our services guarantee 
+          maximum occupancy and profitability.
+        </p>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- About Section -->
   <section id="about">
@@ -157,61 +219,92 @@
     </ul>
   </section>
 
+
+<section class="testimonials">
+    <h2>What Our Clients Say</h2>
+    <p class="testimonials-intro">At Good Foot Properties Limited, our clients’ satisfaction is our top priority. Here’s what some of them have to say about their experience with us.</p>
+
+    <div class="testimonial-container">
+        <div class="testimonial-card">
+            <p class="testimonial-text">"Good Foot Properties made buying our first home an enjoyable and stress-free experience. Their team was patient, professional, and truly cared about our needs."</p>
+            <h4>- Jane W., Nairobi</h4>
+        </div>
+
+        <div class="testimonial-card">
+            <p class="testimonial-text">"They went above and beyond to find us the perfect piece of land for our dream project. I highly recommend them for anyone looking for trustworthy real estate services."</p>
+            <h4>- Michael K., Kiambu</h4>
+        </div>
+
+        <div class="testimonial-card">
+            <p class="testimonial-text">"From the first call to the day we signed the deal, everything was smooth and transparent. Their attention to detail is unmatched!"</p>
+            <h4>- Sarah M., Thika</h4>
+        </div>
+    </div>
+</section>
+
   <!-- Contact -->
-  <section id="contact">
-    <div class="container">
-      <h2>Contact Us</h2>
-      <p>Get in touch with us for any inquiries about our properties or services.</p>
+<section id="contact" class="contact-section">
+  <div class="container">
+    <h2>Contact Us</h2>
+    <p>Get in touch with us for any inquiries about our properties or services.</p>
 
-      <form id="contactForm" style="max-width: 600px; margin: auto;">
-        <div class="form-group">
-          <label for="name">Name</label>
-          <input type="text" id="name" name="name" placeholder="Your Name" required />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" name="email" placeholder="Your Email" required />
-        </div>
-        <div class="form-group">
-          <label for="phone">Phone</label>
-          <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" autocomplete="tel" maxlength="15" required />
-        </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" placeholder="Your message..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Send Message</button>
-      </form>
+    <form id="contactForm" class="contact-form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your Name" required />
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Your Email" required />
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone</label>
+        <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" autocomplete="tel" maxlength="15" required />
+      </div>
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Your message..." required></textarea>
+      </div>
+      <button type="submit" class="btn-submit">Send Message</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="background-color: #1a1a1a; color: white; padding: 40px 20px; text-align: center;">
+  <div class="footer-container" style="max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 30px;">
+
+    <!-- Company Info -->
+    <div class="footer-about" style="flex: 1; min-width: 250px; text-align: left;">
+      <h3 style="color: #f4b400;">Good Foot Properties Limited</h3>
+      <p>Your trusted partner in buying, selling, and managing real estate with integrity and professionalism.</p>
     </div>
-  </section>
 
- <footer class="footer">
-  <div class="footer-container">
-    <div class="footer-section about">
-      <h3>Good Foot Properties Ltd</h3>
-      <p>We help you buy, sell, and invest in affordable properties across Kenya. Reliable, transparent, and efficient land and housing solutions.</p>
-    </div>
-
-    <div class="footer-section links">
-      <h4>Quick Links</h4>
-      <ul>
-        <li><a href="/index.html">Home</a></li>
-        <li><a href="/properties.html">Properties</a></li>
-        <li><a href="/about.html">About Us</a></li>
-        <li><a href="/contact.html">Contact</a></li>
+    <!-- Quick Links -->
+    <div class="footer-links" style="flex: 1; min-width: 200px; text-align: left;">
+      <h4 style="color: #f4b400;">Quick Links</h4>
+      <ul style="list-style: none; padding: 0; line-height: 2;">
+        <li><a href="#services" style="color: white; text-decoration: none;">Our Services</a></li>
+        <li><a href="#about" style="color: white; text-decoration: none;">About Us</a></li>
+        <li><a href="#contact" style="color: white; text-decoration: none;">Contact</a></li>
+        <li><a href="#testimonials" style="color: white; text-decoration: none;">Testimonials</a></li>
       </ul>
     </div>
 
-    <div class="footer-section contact">
-      <h4>Contact</h4>
-      <p><a href="tel:0116215934">Phone: 0116215934</a></p>
-      <p>Location: Nairobi, Kenya</p>
+    <!-- Contact Info -->
+    <div class="footer-contact" style="flex: 1; min-width: 250px; text-align: left;">
+      <h4 style="color: #f4b400;">Contact Us</h4>
+      <p><strong>Phone:</strong> <a href="tel:0116215934" style="color: white;">0116 215 934</a></p>
+      <p><strong>Email:</strong> <a href="mailto:info@goodfootproperties.com" style="color: white;">info@goodfootproperties.com</a></p>
+      <p><strong>Location:</strong> Nairobi, Kenya</p>
     </div>
+
   </div>
 
-  <div class="footer-bottom">
-    &copy; 2025 Good Foot Properties Limited. All rights reserved.
-  </div>
+  <hr style="border: 0; height: 1px; background: #333; margin: 20px 0;">
+
+  <!-- Bottom Bar -->
+  <p style="margin: 0; font-size: 14px;">&copy; 2025 Good Foot Properties Limited. All Rights Reserved.</p>
 </footer>
 
 
